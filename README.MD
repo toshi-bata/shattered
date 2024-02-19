@@ -1,6 +1,8 @@
 # Convert shattered assembly
-Although shattered assembly can be created from some native CAD formats whose sub-components reside in individual files such as CATIA V5, Creo - Pro/E, NX or SolidWorks, it is not possible to create from a monolithic assembly file such as IFC, Revit or 3DXML. 
-This sample creates shattered assembly from a monolithic assembly file using HOOPS Exchange and LibConverter of HOOPS Communicator. Created shattered parts and master XML file can be loaded using HOOPS Communicator WebViewer APIs: `loadSubtreeFromXmlFile` and `loadSubtreeFromScsXmlFile`
+Although shattered assembly can be created from some native CAD formats whose sub-components reside in individual files such as CATIA V5, Creo - Pro/E, NX or SolidWorks, it is not possible to create from a monolithic assembly file such as IFC, Revit or 3DXML.<br> 
+This sample creates shattered assembly from a monolithic assembly file using HOOPS Exchange and LibConverter of HOOPS Communicator. Created shattered parts and master XML file can be loaded using HOOPS Communicator WebViewer APIs: `loadSubtreeFromXmlFile` and `loadSubtreeFromScsXmlFile`<br>
+This sample was developed for the following article of Tech Soft 3D Forum:<br>
+https://forum.techsoft3d.com/t/how-to-create-shattered-assembly-parts-xml-from-monolithic-assembly/2719
 
 ## Dependencies
 ### SDKs in use (version)
@@ -28,11 +30,11 @@ Windows
 ## Convert shattered assembly
 Linux / MacOS
 1. Switch to root user `sudo su -`
-2. Set library path
-  Linux
-    `export LD_LIBRARY_PATH=/path/to/HOOPS_Communicator/authoring/converter/bin/linux64`
-  MacOS
-    `export DYLD_LIBRARY_PATH=/path/to/HOOPS_Communicator/authoring/converter/bin/macos`
+2. Set library path<br>
+  Linux<br>
+    `export LD_LIBRARY_PATH=/path/to/HOOPS_Communicator/authoring/converter/bin/linux64`<br>
+  MacOS<br>
+    `export DYLD_LIBRARY_PATH=/path/to/HOOPS_Communicator/authoring/converter/bin/macos`<br>
 3. Run `./convertScShattered /path/to/monolithic/assembly/file /path/to/master/xml/file /path/to/SC/model/dir /path/to/SCS/model/dir /path/to/PRC/model/dir` 
 
 Windows
@@ -42,7 +44,7 @@ Windows
 ## Start demo client
 1. Locate all html and js files of quick_start to <Communicator SDK>/quick_start
 2. Start Communicator SC server (<Communicator SDK>/quick_start/start_server)
-3. Open 
-  SCS: `http://localhost:11180/shattered_index.html?viewer=SCS&instance=_empty`
-  CSR: `http://localhost:11180/shattered_index.html?viewer=CSR&instance=_empty`
+3. Open <br>
+  SCS: `http://localhost:11180/shattered_index.html?viewer=SCS&instance=_empty`<br>
+  CSR: `http://localhost:11180/shattered_index.html?viewer=CSR&instance=_empty`<br>
     
