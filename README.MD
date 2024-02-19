@@ -4,8 +4,8 @@ This sample creates shattered assembly from a monolithic assembly file using HOO
 
 ## Dependencies
 ### SDKs in use (version)
-* HOOPS Communicator (2023_SP2_U1)
-* HOOPS Exchange (2023_SP2_U1)
+* HOOPS Communicator (2024)
+* HOOPS Exchange (2024)
 
 ### Tested platforms
 * Ubuntu server 20.04 LTS AWE EC2 instance
@@ -37,7 +37,7 @@ Linux / MacOS
 
 Windows
 1. Run `convertScShattered /path/to/monolithic/assembly/file /path/to/master/xml/file /path/to/SC/model/dir /path/to/SCS/model/dir /path/to/PRC/model/dir` 
-* `/path/to/SC/model/dir`, `/path/to/SCS/model/dir` or `/path/to/PRC/model/dir` can be "" or eliminated if you don't need to export. 
+\* `/path/to/SC/model/dir`, `/path/to/SCS/model/dir` or `/path/to/PRC/model/dir` can be "" or eliminated if you don't need to export. 
 
 ## Start demo client
 1. Locate all html and js files of quick_start to <Communicator SDK>/quick_start
