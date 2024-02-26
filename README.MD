@@ -6,8 +6,8 @@ https://forum.techsoft3d.com/t/how-to-create-shattered-assembly-parts-xml-from-m
 
 ## Dependencies
 ### SDKs in use (version)
-* HOOPS Communicator (2024)
-* HOOPS Exchange (2024)
+* HOOPS Communicator (2024.1.0)
+* HOOPS Exchange (2024.1.0)
 
 ### Tested platforms
 * Ubuntu server 20.04 LTS AWE EC2 instance
