@@ -21,11 +21,7 @@ else
 	PATH_TO_LIBCONVERTER = /Users/toshi/SDK/Communicator/HOOPS_Communicator_2024.1.0/authoring/converter/bin/macos
 endif
 
-PATH_TO_LIBMHD_LIBS = /usr/local/lib
-
 LDLIBS = -ldl -lstdc++ \
-	 -L$(PATH_TO_LIBMHD_LIBS) \
-	 -lmicrohttpd \
 	 -L$(PATH_TO_LIBCONVERTER) \
 	 -lconverter \
 	 -lstdc++fs
