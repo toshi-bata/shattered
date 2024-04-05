@@ -6,8 +6,8 @@ https://forum.techsoft3d.com/t/how-to-create-shattered-assembly-parts-xml-from-m
 
 ## Dependencies
 ### SDKs in use (version)
-* HOOPS Communicator (2024.1.0)
-* HOOPS Exchange (2024.1.0)
+* HOOPS Communicator (2024.2.0)
+* HOOPS Exchange (2024.2.0)
 
 ### Tested platforms
 * Ubuntu server 20.04 LTS AWE EC2 instance
@@ -21,7 +21,12 @@ convertScShattered is a server side console application which is using HOOPS Exc
 
 Linux / MacOS
 3. Edit convertScShattered/Makefile according to your environment
-4. Build `sudo make`
+4. Set library path<br>
+  Linux<br>
+    `export LD_LIBRARY_PATH=/path/to/HOOPS_Communicator/authoring/converter/bin/linux64`<br>
+  MacOS<br>
+    `export DYLD_LIBRARY_PATH=/path/to/HOOPS_Communicator/authoring/converter/bin/macos`<br>
+5. Build `sudo make`
 
 Windows
 3. Edit convertScShattered¥_VS2019.bat accoording to your environment and open convertScShuttered.sln using the bat file
