@@ -14,8 +14,9 @@ https://forum.techsoft3d.com/t/how-to-create-shattered-assembly-parts-xml-from-m
 * Windows 10
 * MacOS 12.4
 
-### Build convertScShattered
-convertScShattered is a server side console application which is using HOOPS Exchange and HC libconverter. 
+### Build convertScShattered / convertScShattered_TreeNode
+convertScShattered is a server side console application which is using HOOPS Exchange and HC libconverter.
+Although convertScShattered is using a Visitor pattern to traverse model file, convertScShattered_TreeNode is using Tree Traversal API which is a new usability API of the 2024 version. 
 1. Unzip HOOPS Exchange SDK and locate a valid hoops_license.h in `includ/` 
 2. Unzip HOOPS Communicator SDK and locate a valid hoops_license.h in `authoring/libconverter/include/`
 
