@@ -41,10 +41,10 @@ Linux / MacOS
     `export LD_LIBRARY_PATH=/path/to/HOOPS_Communicator/authoring/converter/bin/linux64`<br>
   MacOS<br>
     `export DYLD_LIBRARY_PATH=/path/to/HOOPS_Communicator/authoring/converter/bin/macos`<br>
-3. Run `./convertScShattered /path/to/monolithic/assembly/file /path/to/master/xml/file /path/to/SC/model/dir /path/to/SCS/model/dir /path/to/PRC/model/dir` 
+3. Run `./convertScShattered /path/to/monolithic/assembly/file /path/to/master/xml/file /path/to/SC/model/dir /path/to/SCS/model/dir /path/to/PRC/model/dir /path/to/PNG/model/dir` 
 
 Windows
-1. Run `convertScShattered /path/to/monolithic/assembly/file /path/to/master/xml/file /path/to/SC/model/dir /path/to/SCS/model/dir /path/to/PRC/model/dir`<br>
+1. Run `convertScShattered /path/to/monolithic/assembly/file /path/to/master/xml/file /path/to/SC/model/dir /path/to/SCS/model/dir /path/to/PRC/model/dir /path/to/PNG/model/dir`<br>
 \* `/path/to/SC/model/dir`, `/path/to/SCS/model/dir` or `/path/to/PRC/model/dir` can be "" or eliminated if you don't need to export. 
 
 ## Start demo client
