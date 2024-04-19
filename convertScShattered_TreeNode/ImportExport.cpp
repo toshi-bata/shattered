@@ -27,15 +27,27 @@
 #include "utilities.h"
 #include "Matrix.h"
 
+A3DPtr IAlloc(size_t in_size)
+{
+	return malloc(in_size);
+}
+A3DVoid IFree(
+	A3DPtr in_ptr)
+{
+	free(in_ptr);
+}
+
 static MY_CHAR acSrcFileName[_MAX_PATH * 2];
 static MY_CHAR acXmlFileName[_MAX_PATH * 2];
 static MY_CHAR acScDirPath[_MAX_PATH * 2] = { '\0' };
 static MY_CHAR acScsDirPath[_MAX_PATH * 2] = { '\0' };
 static MY_CHAR acPrcDirPath[_MAX_PATH * 2] = { '\0' };
+static MY_CHAR acPngDirPath[_MAX_PATH * 2] = { '\0' };
 static A3DUTF8Char acModelNameUTF8[_MAX_PATH * 2];
 static MY_CHAR* pcScModelDirPath = NULL;
 static MY_CHAR* pcScsModelDirPath = NULL;
-static MY_CHAR *pcPrcModelDirPath = NULL;
+static MY_CHAR* pcPrcModelDirPath = NULL;
+static MY_CHAR *pcPngModelDirPath = NULL;
 static Communicator::Importer libImporter;
 
 A3DAsmModelFileData _sModelFileData;
@@ -86,7 +98,7 @@ bool savePrcSc(const MY_CHAR* partName, A3DAsmModelFile* pModelFile)
 #endif
 	}
 
-	// Export SCZ and SCS
+	// Export SCZ, SCS and PNG
 	if (!libImporter.Load(pModelFile))
 		return false;
 
@@ -100,6 +112,7 @@ bool savePrcSc(const MY_CHAR* partName, A3DAsmModelFile* pModelFile)
 
 	A3DUTF8Char* pcScFilePathUTF8 = nullptr;
 	A3DUTF8Char* pcScsFilePathUTF8 = nullptr;
+	A3DUTF8Char* pcPngFilePathUTF8 = nullptr;
 
 #ifdef _MSC_VER
 	if (pcScModelDirPath)
@@ -119,6 +132,15 @@ bool savePrcSc(const MY_CHAR* partName, A3DAsmModelFile* pModelFile)
 		pcScsFilePathUTF8 = (A3DUTF8Char*)malloc(MY_STRLEN(pcScsFilePath) * sizeof(A3DUniChar));
 		A3DMiscUTF16ToUTF8(pcScsFilePath, pcScsFilePathUTF8);
 	}
+
+	if (pcPngModelDirPath)
+	{
+		MY_CHAR* pcPngFilePath = new MY_CHAR[(MY_STRLEN(pcPngModelDirPath) + MY_STRLEN(partName) + 6) * sizeof(MY_CHAR)]();
+		wsprintf(pcPngFilePath, _T("%s\\%s.png"), pcPngModelDirPath, partName);
+
+		pcPngFilePathUTF8 = (A3DUTF8Char*)malloc(MY_STRLEN(pcPngFilePath) * sizeof(A3DUniChar));
+		A3DMiscUTF16ToUTF8(pcPngFilePath, pcPngFilePathUTF8);
+	}
 #else
 	if (pcScModelDirPath)
 	{
@@ -131,11 +153,27 @@ bool savePrcSc(const MY_CHAR* partName, A3DAsmModelFile* pModelFile)
 		pcScsFilePathUTF8 = (A3DUTF8Char*)malloc((MY_STRLEN(pcScsModelDirPath) + MY_STRLEN(partName) + 6) * sizeof(A3DUTF8Char));
 		sprintf(pcScsFilePathUTF8, "%s/%s.scs", pcScsModelDirPath, partName);
 	}
+
+	if (pcPngModelDirPath)
+	{
+		pcPngFilePathUTF8 = (A3DUTF8Char*)malloc((MY_STRLEN(pcPngModelDirPath) + MY_STRLEN(partName) + 6) * sizeof(A3DUTF8Char));
+		sprintf(pcPngFilePathUTF8, "%s/%s.scs", pcPngModelDirPath, partName);
+	}
 #endif
-	bool bRet;
+
 	if (pcScFilePathUTF8 || pcScsFilePathUTF8)
 	{
 		if (!exporter.WriteSC(pcScFilePathUTF8, pcScsFilePathUTF8, exportOptions))
+			return false;
+	}
+
+	if (pcPngFilePathUTF8)
+	{
+		Communicator::Color color;
+		color.red = 0.9;
+		color.green = 0.8;
+		color.blue = 0.7;
+		if (!exporter.WritePNG(pcPngFilePathUTF8, 600, 400, color))
 			return false;
 	}
 
@@ -448,7 +486,7 @@ int main(A3DInt32 iArgc, A3DUTF8Char** ppcArgv)
 
 	if (iArgc < 3)
 	{
-		MY_PRINTF2("Usage:\n %s [input CAD file] [output XML file] [output SC path] [output SCS path] [output PRC path]\n", ppcArgv[0]);
+		MY_PRINTF2("Usage:\n %s [input CAD file] [output XML file] [output SC path] [output SCS path] [output PRC path] [output PNG path]\n", ppcArgv[0]);
 		return A3D_ERROR;
 	}
 
@@ -460,11 +498,14 @@ int main(A3DInt32 iArgc, A3DUTF8Char** ppcArgv)
 		MY_STRCPY(acScsDirPath, ppcArgv[4]);
 	if (5 < iArgc)
 		MY_STRCPY(acPrcDirPath, ppcArgv[5]);
+	if (6 < iArgc)
+		MY_STRCPY(acPngDirPath, ppcArgv[6]);
 
 	// Add separator at end of the dist paths
 	addSeparator(acScDirPath);
 	addSeparator(acScsDirPath);
 	addSeparator(acPrcDirPath);
+	addSeparator(acPngDirPath);
 
 	//
 	// ### INITIALIZE HOOPS EXCHANGE
@@ -486,6 +527,12 @@ int main(A3DInt32 iArgc, A3DUTF8Char** ppcArgv)
 	iRet = A3DDllInitialize(A3D_DLL_MAJORVERSION, A3D_DLL_MINORVERSION);
 	if (iRet != A3D_SUCCESS)
 		return iRet;
+
+	int already_loaded = 0;
+	if ((iRet = A3DDllSetCallbacksMemory(IAlloc, IFree)) == A3D_CALLBACK_MEMORY_FUNCTIONS_ALREADY_SET)
+	{
+		already_loaded = 1;
+	}
 
 	//
 	// ### INITIALIZE HOOPS COMMUNICATOR LIBCONVERTER
@@ -572,6 +619,15 @@ int main(A3DInt32 iArgc, A3DUTF8Char** ppcArgv)
 		wsprintf(pcPrcModelDirPath, _T("%s%s"), acPrcDirPath, pcModelName);
 		_wmkdir(pcPrcModelDirPath);
 	}
+	// PNG
+	if (MY_STRLEN(acPngDirPath))
+	{
+		size_t len = MY_STRLEN(acPngDirPath) + MY_STRLEN(pcModelName) + 1;
+		pcPngModelDirPath = (MY_CHAR*)malloc(len * sizeof(MY_CHAR));
+
+		wsprintf(pcPngModelDirPath, _T("%s%s"), acPngDirPath, pcModelName);
+		_wmkdir(pcPngModelDirPath);
+	}
 #else
 	// SC
 	if (MY_STRLEN(acScDirPath))
@@ -599,6 +655,15 @@ int main(A3DInt32 iArgc, A3DUTF8Char** ppcArgv)
 
 		sprintf(pcPrcModelDirPath, "%s%s", acPrcDirPath, acModelNameUTF8);
 		mkdir(pcPrcModelDirPath, 0777);
+	}
+	// PNG
+	if (MY_STRLEN(acPngDirPath))
+	{
+		size_t len = strlen(acPngDirPath) + strlen(acModelNameUTF8) + 1;
+		pcPngModelDirPath = (MY_CHAR*)malloc(len * sizeof(MY_CHAR));
+
+		sprintf(pcPngModelDirPath, "%s%s", acPngDirPath, acModelNameUTF8);
+		mkdir(pcPngModelDirPath, 0777);
 	}
 #endif
 
